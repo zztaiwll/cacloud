@@ -2,10 +2,15 @@ package com.cacloud.iam.manager.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.cacloud.redis.common.config.RedisService;
+import com.cacloud.common.constant.CacheConstants;
+import com.cacloud.common.constant.SecurityConstants;
+import com.cacloud.common.utils.IdUtils;
+import com.cacloud.common.utils.JwtUtils;
 import com.cacloud.common.utils.R;
+import com.cacloud.common.utils.StringUtils;
 import com.cacloud.iam.constant.UserTypeEnums;
 import com.cacloud.iam.domain.CreateUserParam;
-import com.cacloud.iam.domain.UserInfoParam;
 import com.cacloud.iam.entity.AccountEntity;
 import com.cacloud.iam.entity.ProjectEntity;
 import com.cacloud.iam.entity.UserEntity;
@@ -14,6 +19,10 @@ import com.cacloud.iam.service.AccountService;
 import com.cacloud.iam.service.ProjectService;
 import com.cacloud.iam.service.UserService;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
@@ -67,17 +76,71 @@ public class UserManagerImpl implements UserManager {
      */
     public R login(String username, String password) {
         log.info("iam user login username is {} password is {}", username, password);
+        //验证信息是否为空
+        if(StringUtils.isEmpty(username)){
+            return R.error(400,"用户名不能为空");
+        }
+        if(StringUtils.isEmpty(password)){
+            return R.error(400,"密码不能为空");
+        }
         // 查询用户信息
         UserEntity userResult = userService.getOne(new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getUserName, username).last("limit 1"));
-
         if (ObjectUtils.isEmpty(userResult)) {
             return R.error(400,"登录用户：" + username + " 不存在");
         }
-
         if (!password.equals(userResult.getPassword())) {
             return R.error(400,"登录用户：" + username + " 密码错误");
         }
-        return R.ok();
+        // 接口返回信息
+        Map<String, Object> rspMap = createToken(userResult);
+        return R.ok(rspMap);
+    }
+    //使用jwt创建token
+    private Map<String, Object> createToken(UserEntity loginUser)
+    {
+        String token = IdUtils.fastUUID();
+        Long userId = loginUser.getId();
+        String userName = loginUser.getUserName();
+        loginUser.setId(userId);
+        loginUser.setUserName(userName);
+        refreshToken(loginUser,token);
+
+        // Jwt存储信息
+        Map<String, Object> claimsMap = new HashMap<String, Object>();
+        claimsMap.put(SecurityConstants.USER_KEY, token);
+        claimsMap.put(SecurityConstants.DETAILS_USER_ID, userId);
+        claimsMap.put(SecurityConstants.DETAILS_USERNAME, userName);
+
+        // 接口返回信息
+        Map<String, Object> rspMap = new HashMap<String, Object>();
+        rspMap.put("access_token", JwtUtils.createToken(claimsMap));
+        rspMap.put("expires_in", expireTime);
+        return rspMap;
+    }
+    @Autowired
+    private RedisService redisService;
+
+    protected static final long MILLIS_SECOND = 1000;
+
+    protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
+
+    private final static long expireTime = CacheConstants.EXPIRATION;
+
+    private final static String ACCESS_TOKEN = CacheConstants.LOGIN_TOKEN_KEY;
+
+    private final static Long MILLIS_MINUTE_TEN = CacheConstants.REFRESH_TIME * MILLIS_MINUTE;
+    //更新token的redis时长和数据库里面的信息
+    public void refreshToken(UserEntity loginUser,String token)
+    {
+        loginUser.setUpdatedTime(LocalDateTime.now());
+//        loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
+        String userKey = getTokenKey(token);
+        redisService.setCacheObject(userKey, loginUser, expireTime, TimeUnit.MINUTES);
+    }
+
+    private String getTokenKey(String token)
+    {
+        return ACCESS_TOKEN + token;
     }
 
 

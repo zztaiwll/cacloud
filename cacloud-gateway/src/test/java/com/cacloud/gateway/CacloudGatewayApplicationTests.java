@@ -1,6 +1,6 @@
 package com.cacloud.gateway;
 
-import com.cacloud.gateway.redis.RedisService;
+import com.cacloud.redis.common.config.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

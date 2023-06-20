@@ -8,7 +8,7 @@ import com.cacloud.common.utils.JwtUtils;
 import com.cacloud.common.utils.ServletUtils;
 import com.cacloud.common.utils.StringUtils;
 import com.cacloud.gateway.config.IgnoreWhiteProperties;
-import com.cacloud.gateway.redis.RedisService;
+import com.cacloud.redis.common.config.RedisService;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,17 +67,17 @@ public class AuthFilter implements GlobalFilter, Ordered
         {
             return unauthorizedResponse(exchange, "登录状态已过期");
         }
-        String userid = JwtUtils.getUserId(claims);
-        String username = JwtUtils.getUserName(claims);
-        if (StringUtils.isEmpty(userid) || StringUtils.isEmpty(username))
+        String userId = JwtUtils.getUserId(claims);
+        String userName = JwtUtils.getUserName(claims);
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(userName))
         {
             return unauthorizedResponse(exchange, "令牌验证失败");
         }
 
         // 设置用户信息到请求
         addHeader(mutate, SecurityConstants.USER_KEY, userkey);
-        addHeader(mutate, SecurityConstants.DETAILS_USER_ID, userid);
-        addHeader(mutate, SecurityConstants.DETAILS_USERNAME, username);
+        addHeader(mutate, SecurityConstants.DETAILS_USER_ID, userId);
+        addHeader(mutate, SecurityConstants.DETAILS_USERNAME, userName);
         // 内部请求来源参数清除
         removeHeader(mutate, SecurityConstants.FROM_SOURCE);
         return chain.filter(exchange.mutate().request(mutate.build()).build());

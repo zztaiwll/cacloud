@@ -19,6 +19,7 @@
         <module>cacloud-ibatis-common</module>
         <module>cacloud-swagger-common</module>
         <module>cacloud-test</module>
+        <module>cacloud-redis-common</module>
     </modules>
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
