@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cacloud.resource.dao.EdgeMapperGenerated">
+  <resultMap id="BaseResultMap" type="com.cacloud.resource.entity.Edge">
+    <!--@mbg.generated-->
+    <!--@Table resource_edge-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="resource_provider_id" jdbcType="INTEGER" property="resourceProviderId" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="uri" jdbcType="VARCHAR" property="uri" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="deleted" jdbcType="BOOLEAN" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, resource_provider_id, region, uri, created_time, updated_time, created_by, updated_by, 
+    deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from resource_edge
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from resource_edge
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cacloud.resource.entity.Edge">
+    <!--@mbg.generated-->
+    insert into resource_edge (id, resource_provider_id, region, 
+      uri, created_time, updated_time, 
+      created_by, updated_by, deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{resourceProviderId,jdbcType=INTEGER}, #{region,jdbcType=VARCHAR}, 
+      #{uri,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, #{deleted,jdbcType=BOOLEAN}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cacloud.resource.entity.Edge">
+    <!--@mbg.generated-->
+    insert into resource_edge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="resourceProviderId != null">
+        resource_provider_id,
+      </if>
+      <if test="region != null and region != ''">
+        region,
+      </if>
+      <if test="uri != null and uri != ''">
+        uri,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        created_by,
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        updated_by,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="resourceProviderId != null">
+        #{resourceProviderId,jdbcType=INTEGER},
+      </if>
+      <if test="region != null and region != ''">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null and uri != ''">
+        #{uri,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cacloud.resource.entity.Edge">
+    <!--@mbg.generated-->
+    update resource_edge
+    <set>
+      <if test="resourceProviderId != null">
+        resource_provider_id = #{resourceProviderId,jdbcType=INTEGER},
+      </if>
+      <if test="region != null and region != ''">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="uri != null and uri != ''">
+        uri = #{uri,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cacloud.resource.entity.Edge">
+    <!--@mbg.generated-->
+    update resource_edge
+    set resource_provider_id = #{resourceProviderId,jdbcType=INTEGER},
+      region = #{region,jdbcType=VARCHAR},
+      uri = #{uri,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=BOOLEAN}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

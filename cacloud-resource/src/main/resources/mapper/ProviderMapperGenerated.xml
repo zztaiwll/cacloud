@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cacloud.resource.dao.ProviderMapperGenerated">
+  <resultMap id="BaseResultMap" type="com.cacloud.resource.entity.Provider">
+    <!--@mbg.generated-->
+    <!--@Table resource_provider-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="BOOLEAN" property="type" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="ak" jdbcType="VARCHAR" property="ak" />
+    <result column="sk" jdbcType="VARCHAR" property="sk" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="deleted" jdbcType="BOOLEAN" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, `type`, product_id, ak, sk, created_time, updated_time, created_by, updated_by, 
+    deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from resource_provider
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from resource_provider
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.cacloud.resource.entity.Provider">
+    <!--@mbg.generated-->
+    insert into resource_provider (id, `name`, `type`, 
+      product_id, ak, sk, 
+      created_time, updated_time, created_by, 
+      updated_by, deleted)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=BOOLEAN}, 
+      #{productId,jdbcType=VARCHAR}, #{ak,jdbcType=VARCHAR}, #{sk,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{deleted,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cacloud.resource.entity.Provider">
+    <!--@mbg.generated-->
+    insert into resource_provider
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null and name != ''">
+        `name`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="productId != null and productId != ''">
+        product_id,
+      </if>
+      <if test="ak != null and ak != ''">
+        ak,
+      </if>
+      <if test="sk != null and sk != ''">
+        sk,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        created_by,
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        updated_by,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null and name != ''">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BOOLEAN},
+      </if>
+      <if test="productId != null and productId != ''">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="ak != null and ak != ''">
+        #{ak,jdbcType=VARCHAR},
+      </if>
+      <if test="sk != null and sk != ''">
+        #{sk,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cacloud.resource.entity.Provider">
+    <!--@mbg.generated-->
+    update resource_provider
+    <set>
+      <if test="name != null and name != ''">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=BOOLEAN},
+      </if>
+      <if test="productId != null and productId != ''">
+        product_id = #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="ak != null and ak != ''">
+        ak = #{ak,jdbcType=VARCHAR},
+      </if>
+      <if test="sk != null and sk != ''">
+        sk = #{sk,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cacloud.resource.entity.Provider">
+    <!--@mbg.generated-->
+    update resource_provider
+    set `name` = #{name,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=BOOLEAN},
+      product_id = #{productId,jdbcType=VARCHAR},
+      ak = #{ak,jdbcType=VARCHAR},
+      sk = #{sk,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      deleted = #{deleted,jdbcType=BOOLEAN}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

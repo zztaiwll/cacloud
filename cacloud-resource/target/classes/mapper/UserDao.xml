@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cacloud.iam.dao.UserDao">
+  <resultMap id="BaseResultMap" type="com.cacloud.iam.entity.UserEntity">
+    <!--@mbg.generated-->
+    <!--@Table iam_user-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="userType" jdbcType="INTEGER" property="usertype" />
+    <result column="ak" jdbcType="VARCHAR" property="ak" />
+    <result column="sk" jdbcType="VARCHAR" property="sk" />
+    <result column="compnay_name" jdbcType="VARCHAR" property="compnayName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="password_changed_time" jdbcType="TIMESTAMP" property="passwordChangedTime" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, account_id, user_name, `password`, userType, ak, sk, compnay_name, email, phone,
+    `status`, password_changed_time, deleted, created_time, updated_time, created_by,
+    updated_by
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from iam_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from iam_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cacloud.iam.entity.UserEntity">
+    <!--@mbg.generated-->
+    insert into iam_user (id, account_id, user_name,
+      `password`, userType, ak,
+      sk, compnay_name, email,
+      phone, `status`, password_changed_time,
+      deleted, created_time, updated_time,
+      created_by, updated_by)
+    values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{usertype,jdbcType=BOOLEAN}, #{ak,jdbcType=VARCHAR},
+      #{sk,jdbcType=VARCHAR}, #{compnayName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{status,jdbcType=BOOLEAN}, #{passwordChangedTime,jdbcType=TIMESTAMP},
+      #{deleted,jdbcType=BOOLEAN}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP},
+      #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cacloud.iam.entity.UserEntity">
+    <!--@mbg.generated-->
+    insert into iam_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="userName != null and userName != ''">
+        user_name,
+      </if>
+      <if test="password != null and password != ''">
+        `password`,
+      </if>
+      <if test="usertype != null">
+        userType,
+      </if>
+      <if test="ak != null and ak != ''">
+        ak,
+      </if>
+      <if test="sk != null and sk != ''">
+        sk,
+      </if>
+      <if test="compnayName != null and compnayName != ''">
+        compnay_name,
+      </if>
+      <if test="email != null and email != ''">
+        email,
+      </if>
+      <if test="phone != null and phone != ''">
+        phone,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="passwordChangedTime != null">
+        password_changed_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        created_by,
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        updated_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="accountId != null">
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null and userName != ''">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null and password != ''">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null">
+        #{usertype,jdbcType=BOOLEAN},
+      </if>
+      <if test="ak != null and ak != ''">
+        #{ak,jdbcType=VARCHAR},
+      </if>
+      <if test="sk != null and sk != ''">
+        #{sk,jdbcType=VARCHAR},
+      </if>
+      <if test="compnayName != null and compnayName != ''">
+        #{compnayName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null and email != ''">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone != ''">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BOOLEAN},
+      </if>
+      <if test="passwordChangedTime != null">
+        #{passwordChangedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cacloud.iam.entity.UserEntity">
+    <!--@mbg.generated-->
+    update iam_user
+    <set>
+      <if test="accountId != null">
+        account_id = #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null and userName != ''">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null and password != ''">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="usertype != null">
+        userType = #{usertype,jdbcType=BOOLEAN},
+      </if>
+      <if test="ak != null and ak != ''">
+        ak = #{ak,jdbcType=VARCHAR},
+      </if>
+      <if test="sk != null and sk != ''">
+        sk = #{sk,jdbcType=VARCHAR},
+      </if>
+      <if test="compnayName != null and compnayName != ''">
+        compnay_name = #{compnayName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null and email != ''">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone != ''">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=BOOLEAN},
+      </if>
+      <if test="passwordChangedTime != null">
+        password_changed_time = #{passwordChangedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BOOLEAN},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy != ''">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null and updatedBy != ''">
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cacloud.iam.entity.UserEntity">
+    <!--@mbg.generated-->
+    update iam_user
+    set account_id = #{accountId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      userType = #{usertype,jdbcType=BOOLEAN},
+      ak = #{ak,jdbcType=VARCHAR},
+      sk = #{sk,jdbcType=VARCHAR},
+      compnay_name = #{compnayName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=BOOLEAN},
+      password_changed_time = #{passwordChangedTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BOOLEAN},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

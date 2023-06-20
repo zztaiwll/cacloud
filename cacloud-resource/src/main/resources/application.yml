@@ -1,0 +1,12 @@
+#spring:
+#    application:
+#      # 应用名称
+#      name: cacloud-iam
+#    profiles:
+#      # 环境配置
+#      active: dev
+#    datasource:
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://47.104.11.180:3234/cacloud_iam
+#        username: root
+#        password: cheersu1234!
