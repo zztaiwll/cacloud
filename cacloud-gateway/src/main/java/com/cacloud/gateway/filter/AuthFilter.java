@@ -8,6 +8,7 @@ import com.cacloud.common.utils.JwtUtils;
 import com.cacloud.common.utils.ServletUtils;
 import com.cacloud.common.utils.StringUtils;
 import com.cacloud.gateway.config.IgnoreWhiteProperties;
+import com.cacloud.gateway.domain.AuthorizationMessage;
 import com.cacloud.redis.common.config.RedisService;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
@@ -16,10 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 网关鉴权
@@ -45,13 +55,13 @@ public class AuthFilter implements GlobalFilter, Ordered
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpRequest.Builder mutate = request.mutate();
         //验证是token验证还是aksk的验签,若是aksk则直接跳过token验证
-        String ak=request.getHeaders().getFirst("ak");
-
-        if(StringUtils.isNotEmpty(ak)){
+        String authorization=request.getHeaders().getFirst("Authorization");
+        AuthorizationMessage msg=this.convertAuthorizationMessage(authorization);
+        //没有签名信息
+        if(msg!=null&&StringUtils.isNotEmpty(msg.getAk())) {
             return chain.filter(exchange);
         }
         String url = request.getURI().getPath();
-        String query=request.getURI().getQuery();
         // 跳过不需要验证的路径
         if (StringUtils.matches(url, ignoreWhite.getWhites()))
         {
@@ -89,6 +99,7 @@ public class AuthFilter implements GlobalFilter, Ordered
         removeHeader(mutate, SecurityConstants.FROM_SOURCE);
         return chain.filter(exchange.mutate().request(mutate.build()).build());
     }
+
 
     private void addHeader(ServerHttpRequest.Builder mutate, String name, Object value)
     {
@@ -134,9 +145,53 @@ public class AuthFilter implements GlobalFilter, Ordered
         return token;
     }
 
+
+    //根据header的Authorization解析出验签信息
+    private AuthorizationMessage convertAuthorizationMessage(String authorization){
+        if(StringUtils.isEmpty(authorization)){
+            return null;
+        }
+        if(!authorization.startsWith("HMAC-SHA256")){
+            return null;
+        }
+        authorization=authorization.replace("HMAC-SHA256","");
+        String [] authorizationArr=authorization.split(",");
+        if(authorizationArr==null|| authorizationArr.length==0){
+            return null;
+        }
+        AuthorizationMessage result=new AuthorizationMessage();
+        result.setProtocol("HMAC-SHA256");
+        for(String item:authorizationArr){
+            if(StringUtils.isEmpty(item)){
+                return null;
+            }
+            String[] itemArr=item.split("=");
+            if(itemArr==null||itemArr.length==0){
+                String name=itemArr[0];
+                String value=itemArr[1];
+                if(StringUtils.isEmpty(name)){
+                    return null;
+                }
+                if(name.equals("Credential")){
+                    int pos=value.indexOf("/");
+                    String ak=value.substring(0,pos);
+                    String credentialScope=value.substring(pos+1);
+                    result.setAk(ak);
+                    result.setCredentialScope(credentialScope);
+                }else if(name.equals("SignedHeaders")){
+                    result.setSignedHeaders(value);
+                }else if(name.equals("Signature")){
+                    result.setSignature(value);
+                }
+            }
+        }
+        return result;
+    }
     @Override
     public int getOrder()
     {
         return -200;
     }
+
+
 }
