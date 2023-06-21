@@ -44,13 +44,20 @@ public class AuthFilter implements GlobalFilter, Ordered
     {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpRequest.Builder mutate = request.mutate();
+        //验证是token验证还是aksk的验签,若是aksk则直接跳过token验证
+        String ak=request.getHeaders().getFirst("ak");
 
+        if(StringUtils.isNotEmpty(ak)){
+            return chain.filter(exchange);
+        }
         String url = request.getURI().getPath();
+        String query=request.getURI().getQuery();
         // 跳过不需要验证的路径
         if (StringUtils.matches(url, ignoreWhite.getWhites()))
         {
             return chain.filter(exchange);
         }
+
         String token = getToken(request);
         if (StringUtils.isEmpty(token))
         {
@@ -118,7 +125,7 @@ public class AuthFilter implements GlobalFilter, Ordered
      */
     private String getToken(ServerHttpRequest request)
     {
-        String token = request.getHeaders().getFirst(TokenConstants.AUTHENTICATION);
+        String token = request.getHeaders().getFirst(TokenConstants.TOKEN);
         // 如果前端设置了令牌前缀，则裁剪掉前缀
         if (StringUtils.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX))
         {

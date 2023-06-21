@@ -10,7 +10,7 @@ public class TokenConstants
     /**
      * 令牌自定义标识
      */
-    public static final String AUTHENTICATION = "Authorization";
+    public static final String TOKEN = "token";
 
     /**
      * 令牌前缀
