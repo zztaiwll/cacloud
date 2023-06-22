@@ -19,8 +19,7 @@ public class CacloudGatewayApplicationTests {
     }
     @Test
     public void redisTest(){
-        redisService.setCacheObject("123","234");
-        System.out.println(redisService.getCacheObject("123").toString());
+        System.out.println(redisService.getCacheObject("AK1234567890qwer").toString());
     }
 
 }

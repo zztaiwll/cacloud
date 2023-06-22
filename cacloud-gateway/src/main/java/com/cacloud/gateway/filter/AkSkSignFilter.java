@@ -28,8 +28,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
@@ -67,6 +65,9 @@ public class AkSkSignFilter implements GlobalFilter, Ordered {
         String sha256=request.getHeaders().getFirst("X-Content-Sha256");
         String contentType=request.getHeaders().getFirst("Content-Type");
         String timeStamp=request.getHeaders().getFirst("timeStamp");
+        if(StringUtils.isEmpty(host)||StringUtils.isEmpty(xDate)||StringUtils.isEmpty(sha256)||StringUtils.isEmpty(contentType)||StringUtils.isEmpty(timeStamp)){
+            return unauthorizedResponse(exchange, "头消息中鉴权参数缺失");
+        }
         //验证时间戳，最好是在30秒内的请求
         Long sendTime=Long.parseLong(timeStamp);
         if(System.currentTimeMillis()-sendTime>30000){
@@ -174,42 +175,27 @@ public class AkSkSignFilter implements GlobalFilter, Ordered {
             }
             String[] itemArr=item.split("=");
             if(itemArr==null||itemArr.length==0){
-                String name=itemArr[0];
-                String value=itemArr[1];
-                if(StringUtils.isEmpty(name)){
-                    return null;
-                }
-                if(name.equals("Credential")){
-                    int pos=value.indexOf("/");
-                    String ak=value.substring(0,pos);
-                    String credentialScope=value.substring(pos+1);
-                    result.setAk(ak);
-                    result.setCredentialScope(credentialScope);
-                }else if(name.equals("SignedHeaders")){
-                    result.setSignedHeaders(value);
-                }else if(name.equals("Signature")){
-                    result.setSignature(value);
-                }
+                return null;
             }
+            String name=itemArr[0];
+            String value=itemArr[1];
+            if(StringUtils.isEmpty(name)){
+                return null;
+            }
+            if(name.trim().equals("Credential")){
+                int pos=value.indexOf("/");
+                String ak=value.substring(0,pos);
+                String credentialScope=value.substring(pos+1);
+                result.setAk(ak.trim());
+                result.setCredentialScope(credentialScope);
+            }else if(name.trim().equals("SignedHeaders")){
+                result.setSignedHeaders(value.trim());
+            }else if(name.trim().equals("Signature")){
+                result.setSignature(value.trim());
+            }
+
         }
         return result;
-    }
-    /**
-     * 从Flux<DataBuffer>中获取字符串的方法
-     *
-     * @return 请求体
-     */
-    private String resolveBodyFromRequest(ServerHttpRequest serverHttpRequest) {
-        //获取请求体
-        Flux<DataBuffer> body = serverHttpRequest.getBody();
-        AtomicReference<String> bodyRef = new AtomicReference<>();
-        body.subscribe(buffer -> {
-            CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
-            DataBufferUtils.release(buffer);
-            bodyRef.set(charBuffer.toString());
-        });
-        //获取request body
-        return bodyRef.get();
     }
 
 }

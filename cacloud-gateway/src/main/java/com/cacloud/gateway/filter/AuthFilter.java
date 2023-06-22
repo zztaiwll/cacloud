@@ -167,23 +167,25 @@ public class AuthFilter implements GlobalFilter, Ordered
             }
             String[] itemArr=item.split("=");
             if(itemArr==null||itemArr.length==0){
-                String name=itemArr[0];
-                String value=itemArr[1];
-                if(StringUtils.isEmpty(name)){
-                    return null;
-                }
-                if(name.equals("Credential")){
-                    int pos=value.indexOf("/");
-                    String ak=value.substring(0,pos);
-                    String credentialScope=value.substring(pos+1);
-                    result.setAk(ak);
-                    result.setCredentialScope(credentialScope);
-                }else if(name.equals("SignedHeaders")){
-                    result.setSignedHeaders(value);
-                }else if(name.equals("Signature")){
-                    result.setSignature(value);
-                }
+                return null;
             }
+            String name=itemArr[0];
+            String value=itemArr[1];
+            if(StringUtils.isEmpty(name)){
+                return null;
+            }
+            if(name.trim().equals("Credential")){
+                int pos=value.indexOf("/");
+                String ak=value.substring(0,pos);
+                String credentialScope=value.substring(pos+1);
+                result.setAk(ak.trim());
+                result.setCredentialScope(credentialScope);
+            }else if(name.trim().equals("SignedHeaders")){
+                result.setSignedHeaders(value.trim());
+            }else if(name.trim().equals("Signature")){
+                result.setSignature(value.trim());
+            }
+
         }
         return result;
     }
