@@ -47,7 +47,6 @@ public class AkSkSignFilter implements GlobalFilter, Ordered {
         //首先确认是否是aksk方式的验签，如果不是直接跳过
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpRequest.Builder mutate = request.mutate();
-
         String authorization=request.getHeaders().getFirst("Authorization");
         if(StringUtils.isEmpty(authorization)){
             return chain.filter(exchange);
